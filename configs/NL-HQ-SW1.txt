@@ -1,0 +1,207 @@
+ Authorized access only. Northline Systems. 
+
+User Access Verification
+
+Username: eddy 
+% Login invalid
+
+Username: eddy    admin
+Password: 
+% Login invalid
+
+Username: admin
+Password: 
+NL-HQ-SW1#ter
+NL-HQ-SW1#terminal l
+NL-HQ-SW1#terminal length 0
+NL-HQ-SW1#sh run
+Building configuration...
+
+Current configuration : 3408 bytes
+!
+version 12.1
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+service password-encryption
+!
+hostname NL-HQ-SW1
+!
+enable secret 5 $1$IgYH$0Vav6Fr6aQru3xROKnFpD1
+!
+username admin privilege 15 secret 5 $1$.5sd$B/UXioa7PdO1L1GmVYVQj1
+ip subnet-zero
+!
+no ip domain-lookup
+ip domain-name northline.local
+vtp mode transparent
+!
+spanning-tree mode pvst
+no spanning-tree optimize bpdu transmission
+spanning-tree extend system-id
+!
+!
+!
+!
+vlan 10
+ name USERS
+!
+vlan 20
+ name SERVERS
+!
+vlan 99
+ name MGMT
+!
+vlan 999
+ name PARKING
+!
+interface FastEthernet0/1
+ description Uplink to NL-HQ-R1
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,99
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface FastEthernet0/2
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/3
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/4
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/5
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/6
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/7
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/8
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/9
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/10
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/11
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/12
+ description Users
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/13
+ description Servers
+ switchport access vlan 20
+ spanning-tree portfast
+!
+interface FastEthernet0/14
+ description Servers
+ switchport access vlan 20
+ spanning-tree portfast
+!
+interface FastEthernet0/15
+ description Servers
+ switchport access vlan 20
+ spanning-tree portfast
+!
+interface FastEthernet0/16
+ description Servers
+ switchport access vlan 20
+ spanning-tree portfast
+!
+interface FastEthernet0/17
+ description Unused ports 
+ switchport access vlan 999
+ shutdown
+!
+interface FastEthernet0/18
+ description Unused ports 
+ switchport access vlan 999
+ shutdown
+!
+interface FastEthernet0/19
+ description Unused ports 
+ switchport access vlan 999
+ shutdown
+!
+interface FastEthernet0/20
+ description Unused ports 
+ switchport access vlan 999
+ shutdown
+!
+interface FastEthernet0/21
+ description Unused ports 
+ switchport access vlan 999
+ shutdown
+!
+interface FastEthernet0/22
+ description Unused ports 
+ switchport access vlan 999
+ shutdown
+!
+interface FastEthernet0/23
+ description Unused ports 
+ switchport access vlan 999
+ shutdown
+!
+interface FastEthernet0/24
+ description NOC Mgmt 
+ switchport access vlan 99
+ spanning-tree portfast
+!
+interface Vlan1
+ no ip address
+ no ip route-cache
+ shutdown
+!
+interface Vlan99
+ ip address 10.10.99.2 255.255.255.0
+ no ip route-cache
+!
+ip default-gateway 10.10.99.1
+ip http server
+banner motd ^C Authorized access only. Northline Systems. ^C
+!
+line con 0
+ password 7 111918160405041E00
+ logging synchronous
+ login local
+line vty 0 4
+ password 7 044B0A151C36435C0D
+ login
+line vty 5 15
+ password 7 044B0A151C36435C0D
+ login
+!
+!
+end
+
+NL-HQ-SW1#
