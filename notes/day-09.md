@@ -11,6 +11,7 @@ On NL-BR-R1:
 - Configured int Fa0 as a trunk allowing only necessary VLANs (Cisco 881 rejects unless default VLANs 1-2 and 1002-1005 are in it).
 - Configured SVIs for VLAN 30 and 99, and also made native VLAN 999.
 
+```
 NL-BR-R1#sh interfaces trunk 
 
 Port      Mode         Encapsulation  Status        Native vlan
@@ -25,7 +26,7 @@ Fa0       1,30,99,999
 Port      Vlans in spanning tree forwarding state and not pruned
 Fa0       1,30,99,999
 NL-BR-R1#
-
+```
 
 
 
@@ -34,7 +35,9 @@ NL-BR-R1#
 - Configured the clock to current time to prevent dhcp leasing errors. 
 
 ## How I verified it
-- NL-BR-R1#show ip dhcp pool
+- show ip dhcp pool 
+```
+NL-BR-R1#show ip dhcp pool
 
 Pool USERS :
  Utilization mark (high/low)    : 100 / 0
@@ -46,8 +49,10 @@ Pool USERS :
  Current index        IP address range                    Leased addresses
  10.20.30.23          10.20.30.1       - 10.20.30.254      2
 NL-BR-R1#
-
-- NL-BR-R1#show run | section dhcp 
+```
+- show run | section dhcp
+```
+ NL-BR-R1#show run | section dhcp 
 ip dhcp excluded-address 10.20.30.1 10.20.30.20
 ip dhcp pool USERS
  network 10.20.30.0 255.255.255.0
@@ -55,9 +60,12 @@ ip dhcp pool USERS
  dns-server 1.1.1.1 
  domain-name northline.local
 NL-BR-R1#
+```
 - No lease time displayed as that is the default on IOS and sh run does not display defaults.
 
-- NL-BR-R1#show ip int br
+- show ip int br
+```
+NL-BR-R1#show ip int br
 Interface                  IP-Address      OK? Method Status                Protocol
 Cellular0                  unassigned      YES NVRAM  up                    up      
 FastEthernet0              unassigned      YES unset  up                    up      
@@ -69,11 +77,11 @@ Vlan1                      unassigned      YES unset  up                    up
 Vlan30                     10.20.30.1      YES manual up                    up      
 Vlan99                     10.20.99.1      YES manual up                    up      
 NL-BR-R1#
-
+```
 - show ip dhcp binding - showed the Acer's MAC with an expiry date of tomorrow
 - the Acer got 10.20.30.22 in VLAN 30, with the gateway, DNS and domain from DHCP details.
 - Pings to both SVIs were successful as shown below:
-
+```
 eddy-igweonu@eddy-igweonu-Aspire-A515-54:~$ ping 10.20.30.1
 PING 10.20.30.1 (10.20.30.1) 56(84) bytes of data.
 64 bytes from 10.20.30.1: icmp_seq=1 ttl=255 time=1.25 ms
@@ -94,10 +102,7 @@ PING 10.20.99.1 (10.20.99.1) 56(84) bytes of data.
 --- 10.20.99.1 ping statistics ---
 4 packets transmitted, 4 received, 0% packet loss, time 3109ms
 rtt min/avg/max/mdev = 0.498/0.612/0.765/0.100 ms
-
-
-
-
+```
 
 
 ## What went wrong
@@ -105,22 +110,23 @@ rtt min/avg/max/mdev = 0.498/0.612/0.765/0.100 ms
 - Ping to 10.20.99.1 from the Acer failed at first until I added a temporary route via 10.20.30.1. nl-dhcp has never-default set and no default route, so traffic to other subnets went out the Wi-Fi. 
 - The TP-Link switch took the ip address 10.20.30.21 in VLAN 30, proving the mgmt is not isolated from users on the switch. 
 - The switch's mgmt plane sent its DHCP requests in VLAN 30, out port 1 tagged. 
-
+```
 eddy-igweonu@eddy-igweonu-Aspire-A515-54:~$ curl -s https://api.macvendors.com/18:69:45
 
 TP-Link Systems Inc.
-
-
+```
+```
 Protocol  Address          Age (min)  Hardware Addr   Type   Interface
 Internet  10.20.30.1              -   7c0e.ced0.c3f2  ARPA   Vlan30
 Internet  10.20.30.21             0   1869.4542.2075  ARPA   Vlan30
-
+```
+```
 IP address          Client-ID/              Lease expiration        Type
                     Hardware address/
                     User name
 10.20.30.21         0118.6945.4220.75       Dec 01 2026 07:01 PM    Automatic
 10.20.30.22         01b4.a9fc.7900.d3       Nov 25 2026 07:06 PM    Automatic
-
+```
 
 ## Why it works
 - Excludes addresses that may be needed for default gateways and static devices.
