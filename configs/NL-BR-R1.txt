@@ -2,9 +2,9 @@
 Building configuration...
 
   
-Current configuration : 2520 bytes
+Current configuration : 2610 bytes
 !
-! Last configuration change at 07:21:53 UTC Wed Feb 6 2036 by admin
+! Last configuration change at 11:23:11 UTC Wed Feb 6 2036 by admin
 !
 version 15.7
 no service pad
@@ -12,7 +12,7 @@ service timestamps debug datetime msec
 service timestamps log datetime msec
 service password-encryption
 !
-hostname NL-HQ-R1
+hostname NL-BR-R1
 !
 boot-start-marker
 boot-end-marker
@@ -41,21 +41,13 @@ no aaa new-model
 
 
 !
-ip dhcp excluded-address 10.10.10.1 10.10.10.20
-ip dhcp excluded-address 10.10.20.1 10.10.20.20
+ip dhcp excluded-address 10.20.30.1 10.20.30.20
 !
 ip dhcp pool USERS
- network 10.10.10.0 255.255.255.0
- default-router 10.10.10.1 
- domain-name northline.local
- dns-server 1.1.1.1 
-!
-ip dhcp pool SERVERS
- network 10.10.20.0 255.255.255.0
- default-router 10.10.20.1 
+ network 10.20.30.0 255.255.255.0
+ default-router 10.20.30.1 
  dns-server 1.1.1.1 
  domain-name northline.local
- lease 7
 !
 !
 !
@@ -67,7 +59,7 @@ no ipv6 cef
 !
 multilink bundle-name authenticated
 chat-script hspa-R7 "" "AT!SCACT=1,1" TIMEOUT 60 "OK"
-license udi pid C881G+7-A-K9 sn FTX183883XQ
+license udi pid C881G+7-A-K9 sn FTX183883XT
 !
 !
 username admin privilege 15 secret 5 <removed>
@@ -89,11 +81,12 @@ controller Cellular 0
 !
 !
 interface Loopback0
- ip address 10.255.0.1 255.255.255.255
+ ip address 10.255.0.2 255.255.255.255
 !
 interface FastEthernet0
+ switchport access vlan 99
  switchport trunk native vlan 999
- switchport trunk allowed vlan 1,2,10,20,99,1002-1005
+ switchport trunk allowed vlan 1,2,30,99,999,1002-1005
  switchport mode trunk
  no ip address
 !
@@ -114,38 +107,49 @@ interface FastEthernet4
  speed auto
 !
 interface Cellular0
- no ip address
+ ip address negotiated
  encapsulation slip
  dialer in-band
+ dialer idle-timeout 0
  dialer string hspa-R7
+ dialer-group 1
 !
 interface Vlan1
  no ip address
 !
-interface Vlan10
- ip address 10.10.10.1 255.255.255.0
-!
-interface Vlan20
- ip address 10.10.20.1 255.255.255.0
+interface Vlan30
+ description Users
+ ip address 10.20.30.1 255.255.255.0
 !
 interface Vlan99
- ip address 10.10.99.1 255.255.255.0
+ description Mgmt 
+ ip address 10.20.99.1 255.255.255.0
 !
 interface Vlan100
- description WAN 
- ip address 172.16.0.1 255.255.255.252
+ description WAN
+ ip address 172.16.0.2 255.255.255.252
+ ip ospf network point-to-point
+!
+router ospf 1
+ router-id 10.255.0.2
+ passive-interface Loopback0
+ passive-interface Vlan30
+ passive-interface Vlan99
+ network 10.20.30.0 0.0.0.255 area 0
+ network 10.20.99.0 0.0.0.255 area 0
+ network 10.255.0.2 0.0.0.0 area 0
+ network 172.16.0.0 0.0.0.3 area 0
 !
 ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
 !
-ip route 10.20.30.0 255.255.255.0 172.16.0.2
-ip route 10.20.99.0 255.255.255.0 172.16.0.2
-ip route 10.255.0.2 255.255.255.255 172.16.0.2
 ip ssh time-out 60
 ip ssh version 2
 !
+dialer-list 1 protocol ip permit
+dialer-list 1 protocol ipv6 permit
 ipv6 ioam timestamp
 !
 !
