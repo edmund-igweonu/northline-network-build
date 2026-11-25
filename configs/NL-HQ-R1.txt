@@ -1,17 +1,10 @@
  Authorized access only. Northline Systems. 
-
-User Access Verification
-
-Username: admin
-Password: 
-NL-HQ-R1#ter
-NL-HQ-R1#terminal l
-NL-HQ-R1#terminal length 0
-NL-HQ-R1#sh run
 Building configuration...
 
   
-Current configuration : 2147 bytes
+Current configuration : 2520 bytes
+!
+! Last configuration change at 07:21:53 UTC Wed Feb 6 2036 by admin
 !
 version 15.7
 no service pad
@@ -25,7 +18,7 @@ boot-start-marker
 boot-end-marker
 !
 !
-enable secret 5 $1$SU48$UKvKX.nnAJdHJ7wTQBIqC/
+enable secret 5 <removed>
 !
 no aaa new-model
 !
@@ -77,7 +70,7 @@ chat-script hspa-R7 "" "AT!SCACT=1,1" TIMEOUT 60 "OK"
 license udi pid C881G+7-A-K9 sn FTX183883XQ
 !
 !
-username admin privilege 15 secret 5 $1$iWr1$zG0nswCyI97k7ceUkIG9S0
+username admin privilege 15 secret 5 <removed>
 !
 !
 !
@@ -95,6 +88,9 @@ controller Cellular 0
 !
 !
 !
+interface Loopback0
+ ip address 10.255.0.1 255.255.255.255
+!
 interface FastEthernet0
  switchport trunk native vlan 999
  switchport trunk allowed vlan 1,2,10,20,99,1002-1005
@@ -108,6 +104,7 @@ interface FastEthernet2
  no ip address
 !
 interface FastEthernet3
+ switchport access vlan 100
  no ip address
 !
 interface FastEthernet4
@@ -134,11 +131,18 @@ interface Vlan20
 interface Vlan99
  ip address 10.10.99.1 255.255.255.0
 !
+interface Vlan100
+ description WAN 
+ ip address 172.16.0.1 255.255.255.252
+!
 ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
 !
+ip route 10.20.30.0 255.255.255.0 172.16.0.2
+ip route 10.20.99.0 255.255.255.0 172.16.0.2
+ip route 10.255.0.2 255.255.255.255 172.16.0.2
 ip ssh time-out 60
 ip ssh version 2
 !
@@ -150,7 +154,7 @@ control-plane
 banner motd ^C Authorized access only. Northline Systems. ^C
 !
 line con 0
- password 7 111918160405041E00
+ password 7 <removed>
  logging synchronous
  login local
  no modem enable
@@ -159,7 +163,7 @@ line 3
  script dialer hspa-R7
  no exec
 line vty 0 4
- password 7 08314D5D1A0E0A0516
+ password 7 <removed>
  login local
  transport input ssh
 line vty 5 15
@@ -168,5 +172,3 @@ line vty 5 15
 !
 !
 end
-
-NL-HQ-R1#
