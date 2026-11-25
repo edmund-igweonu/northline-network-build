@@ -89,8 +89,9 @@ ip route 10.20.99.0 255.255.255.0 172.16.0.2
 ip route 10.255.0.2 255.255.255.255 172.16.0.2
 NL-HQ-R1#
 ```
-- Fa3 was still in VLAN 1, so VLAN 100 had no up port and hence the Vlan100 SVI stayed down; meaning there was no connected route to 172.16.0.0/30. I corrected this with "switchport access vlan 100" on int Fa3.
+- Fa3 was still in VLAN 1, so VLAN 100 had no up port and hence the Vlan100 SVI stayed down; meaning there was no connected route to 172.16.0.0/30. 
 - That made the next hop unreachable and IOS will not install the routes.
+- I corrected this with "switchport access vlan 100" on int Fa3.
 - The branch router's clock reset again, so DHCP failed on Acer until I set it.
 - The router traceroute failed because NL-BR-SW1 was unplugged, so Fa0 went down and Vlan30 SVI went down with it. 
 
