@@ -2,9 +2,9 @@
 Building configuration...
 
   
-Current configuration : 2741 bytes
+Current configuration : 2824 bytes
 !
-! Last configuration change at 07:37:06 UTC Wed Feb 6 2036 by admin
+! Last configuration change at 07:40:38 UTC Wed Feb 6 2036 by admin
 !
 version 15.7
 no service pad
@@ -18,7 +18,7 @@ boot-start-marker
 boot-end-marker
 !
 !
-enable secret 5 <removed>
+enable secret <removed>
 !
 no aaa new-model
 !
@@ -70,7 +70,7 @@ chat-script hspa-R7 "" "AT!SCACT=1,1" TIMEOUT 60 "OK"
 license udi pid C881G+7-A-K9 sn FTX183883XQ
 !
 !
-username admin privilege 15 secret 5 <removed>
+username admin privilege 15 secret <removed>
 !
 !
 !
@@ -108,10 +108,11 @@ interface FastEthernet3
  no ip address
 !
 interface FastEthernet4
- no ip address
- shutdown
+ description HQ-ISP
+ ip address 203.0.113.2 255.255.255.252
  duplex auto
  speed auto
+ no cdp enable
 !
 interface Cellular0
  no ip address
@@ -138,6 +139,7 @@ interface Vlan100
 !
 router ospf 1
  router-id 10.255.0.1
+ passive-interface FastEthernet4
  passive-interface Loopback0
  passive-interface Vlan10
  passive-interface Vlan20
@@ -164,7 +166,7 @@ control-plane
 banner motd ^C Authorized access only. Northline Systems. ^C
 !
 line con 0
- password 7 <removed>
+ password <removed>
  logging synchronous
  login local
  no modem enable
@@ -173,7 +175,7 @@ line 3
  script dialer hspa-R7
  no exec
 line vty 0 4
- password 7 <removed>
+ password <removed>
  login local
  transport input ssh
 line vty 5 15

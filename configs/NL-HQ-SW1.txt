@@ -1,15 +1,12 @@
+Trying 10.10.99.2...
+Connected to 10.10.99.2.
+Escape character is '^]'.
  Authorized access only. Northline Systems. 
 
 User Access Verification
 
-Username: eddy 
-% Login invalid
-
-Username: eddy    admin
 Password: 
-% Login invalid
-
-Username: admin
+NL-HQ-SW1>s en
 Password: 
 NL-HQ-SW1#ter
 NL-HQ-SW1#terminal l
@@ -17,7 +14,7 @@ NL-HQ-SW1#terminal length 0
 NL-HQ-SW1#sh run
 Building configuration...
 
-Current configuration : 3408 bytes
+Current configuration : 3504 bytes
 !
 version 12.1
 no service pad
@@ -27,9 +24,9 @@ service password-encryption
 !
 hostname NL-HQ-SW1
 !
-enable secret 5 $1$IgYH$0Vav6Fr6aQru3xROKnFpD1
+enable secret <removed>
 !
-username admin privilege 15 secret 5 $1$.5sd$B/UXioa7PdO1L1GmVYVQj1
+username admin privilege 15 secret <removed>
 ip subnet-zero
 !
 no ip domain-lookup
@@ -51,6 +48,12 @@ vlan 20
 !
 vlan 99
  name MGMT
+!
+vlan 901
+ name ISP-HQ
+!
+vlan 902
+ name ISP-BR
 !
 vlan 999
  name PARKING
@@ -158,19 +161,19 @@ interface FastEthernet0/20
  shutdown
 !
 interface FastEthernet0/21
- description Unused ports 
- switchport access vlan 999
- shutdown
+ description ISP-HQ
+ switchport access vlan 901
 !
 interface FastEthernet0/22
- description Unused ports 
- switchport access vlan 999
- shutdown
+ description ISP-BR
+ switchport access vlan 902
 !
 interface FastEthernet0/23
- description Unused ports 
+ description ISP-TRUNK
  switchport access vlan 999
- shutdown
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 901,902
+ switchport mode trunk
 !
 interface FastEthernet0/24
  description NOC Mgmt 
@@ -191,17 +194,17 @@ ip http server
 banner motd ^C Authorized access only. Northline Systems. ^C
 !
 line con 0
- password 7 111918160405041E00
+ password <removed>
  logging synchronous
  login local
 line vty 0 4
- password 7 044B0A151C36435C0D
+ password <removed>
  login
 line vty 5 15
- password 7 044B0A151C36435C0D
+ password <removed>
  login
 !
 !
 end
 
-NL-HQ-SW1#
+NL-HQ-SW1#exit
