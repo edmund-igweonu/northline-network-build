@@ -73,7 +73,7 @@ FastEthernet4              203.0.113.2     YES manual up                    up
 FastEthernet4              203.0.113.6     YES manual up                    up      
 ```
 
-- Confirmed Fa4 on both HQ-R1 and BR-R1 were not sending CDP packets or OSPF hellos with show cdp interfaces and show ip protocols.
+- OSPF isn't running on Fa4 on either router. No network statement covers 203.0.113.x, so OSPF was never enabled on that interface and never sends hellos there. Fa4 does appear in the passive-interface list in show ip protocols, but that only shows what's configured, not what the interface is doing. The passive-interface line is harmless but redundant.
 ```
   Passive Interface(s):
     FastEthernet4
@@ -90,6 +90,7 @@ FastEthernet4              203.0.113.6     YES manual up                    up
     Vlan99
 
 ```
+- Confirmed Fa4 on both HQ-R1 and BR-R1 is not sending CDP packets with show cdp interface. Fa4 is missing from the list on both routers.
 ```
 NL-HQ-R1#show cdp interface 
 FastEthernet0 is up, line protocol is up

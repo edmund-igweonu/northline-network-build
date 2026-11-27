@@ -5,6 +5,7 @@ Ticket: NL-106
 On NL-HQ-R1:
 - Excluded IP addresses in VLAN 10 and 20 from .1 to .20 for gateways and static devices
 - Created a pool for USERS and SERVERS with defined default gateway, DNS server, domain name and lease time
+- USERS uses the default 1 day lease. SERVERS has a 7 day lease, which is intentional.
 
 ## How I verified it
 - show ip dhcp pool - showed the pool configured
