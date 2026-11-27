@@ -10,9 +10,25 @@ On NL-BR-SW1:
 - Changed the admin password and changed description to NL-BR-SW1. 
 
 ## How I verified it
-- Using the web GUI. Check screenshots in notes (day-08-pvid-table and day-08-vlan-table).
+- Using the web GUI (802.1Q VLAN and PVID pages). The config backup is configs/NL-BR-SW1.cfg, which is a TP-Link binary file, so the tables are written out below.
 - VLAN table shows VLAN 30, 99 and 999 with their respective assigned ports. 
+
+| VLAN | Name | Tagged ports | Untagged ports |
+|------|------|--------------|----------------|
+| 30 | USERS | 1 | 2, 3 |
+| 99 | MGMT | 1 | 4 |
+| 999 | PARKING | none | 1, 5 |
+
 - PVID table shows each port's PVID as configured. 
+
+| Port | PVID | Role |
+|------|------|------|
+| 1 | 999 | Trunk to NL-BR-R1 (tagged 30, 99) |
+| 2 | 30 | Users access |
+| 3 | 30 | Users access |
+| 4 | 99 | Mgmt access |
+| 5 | 999 | Unused, disabled |
+
 - Pings to 192.168.0.1 were successful from Acer on ports 1, 2, 3 and 4, confirming the quirk I highlighted earlier. 
 - An end-to-end test whereby VLAN 30 host getting through the trunk will wait for NL-BR-R1. 
 
