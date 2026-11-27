@@ -1,9 +1,11 @@
+ Authorized access only. Northline Systems. 
 Building configuration...
 
   
-Current configuration : 2693 bytes
+Current configuration : 3006 bytes
 !
-! Last configuration change at 09:00:24 UTC Wed Feb 6 2036 by admin
+! Last configuration change at 09:02:48 UTC Wed Feb 6 2036 by admin
+! NVRAM config last updated at 14:45:02 UTC Fri Nov 27 2026 by admin
 !
 version 15.7
 no service pad
@@ -83,36 +85,41 @@ interface Loopback0
  ip address 10.255.0.2 255.255.255.255
 !
 interface FastEthernet0
- switchport access vlan 99
  switchport trunk native vlan 999
  switchport trunk allowed vlan 1,2,30,99,999,1002-1005
  switchport mode trunk
  no ip address
 !
 interface FastEthernet1
+ description Unused
  no ip address
+ shutdown
 !
 interface FastEthernet2
+ description Unused
  no ip address
+ shutdown
 !
 interface FastEthernet3
+ description WAN to NL-HQ-R1
  switchport access vlan 100
  no ip address
 !
 interface FastEthernet4
  description BR-ISP
  ip address 203.0.113.6 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
  duplex auto
  speed auto
  no cdp enable
 !
 interface Cellular0
- ip address negotiated
+ no ip address
  encapsulation slip
+ shutdown
  dialer in-band
- dialer idle-timeout 0
  dialer string hspa-R7
- dialer-group 1
 !
 interface Vlan1
  no ip address
@@ -120,6 +127,8 @@ interface Vlan1
 interface Vlan30
  description Users
  ip address 10.20.30.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
 !
 interface Vlan99
  description Mgmt 
@@ -140,17 +149,21 @@ router ospf 1
  network 10.20.99.0 0.0.0.255 area 0
  network 10.255.0.2 0.0.0.0 area 0
  network 172.16.0.0 0.0.0.3 area 0
+ default-information originate
 !
 ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
 !
+ip nat inside source list NAT-INSIDE interface FastEthernet4 overload
+ip route 0.0.0.0 0.0.0.0 203.0.113.5
 ip ssh time-out 60
 ip ssh version 2
 !
-dialer-list 1 protocol ip permit
-dialer-list 1 protocol ipv6 permit
+ip access-list standard NAT-INSIDE
+ permit 10.20.30.0 0.0.0.255
+!
 ipv6 ioam timestamp
 !
 !

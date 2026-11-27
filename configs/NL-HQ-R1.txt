@@ -1,9 +1,11 @@
+ Authorized access only. Northline Systems. 
 Building configuration...
 
   
-Current configuration : 2824 bytes
+Current configuration : 3408 bytes
 !
-! Last configuration change at 07:40:38 UTC Wed Feb 6 2036 by admin
+! Last configuration change at 13:57:10 UTC Fri Nov 27 2026 by admin
+! NVRAM config last updated at 14:45:14 UTC Fri Nov 27 2026 by admin
 !
 version 15.7
 no service pad
@@ -97,18 +99,25 @@ interface FastEthernet0
  no ip address
 !
 interface FastEthernet1
+ description Unused
  no ip address
+ shutdown
 !
 interface FastEthernet2
+ description Unused
  no ip address
+ shutdown
 !
 interface FastEthernet3
+ description WAN to NL-BR-R1
  switchport access vlan 100
  no ip address
 !
 interface FastEthernet4
  description HQ-ISP
  ip address 203.0.113.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
  duplex auto
  speed auto
  no cdp enable
@@ -116,6 +125,7 @@ interface FastEthernet4
 interface Cellular0
  no ip address
  encapsulation slip
+ shutdown
  dialer in-band
  dialer string hspa-R7
 !
@@ -123,12 +133,19 @@ interface Vlan1
  no ip address
 !
 interface Vlan10
+ description USERS
  ip address 10.10.10.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
 !
 interface Vlan20
+ description SERVERS
  ip address 10.10.20.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
 !
 interface Vlan99
+ description MGMT
  ip address 10.10.99.1 255.255.255.0
 !
 interface Vlan100
@@ -148,14 +165,21 @@ router ospf 1
  network 10.10.99.0 0.0.0.255 area 0
  network 10.255.0.1 0.0.0.0 area 0
  network 172.16.0.0 0.0.0.3 area 0
+ default-information originate
 !
 ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
 !
+ip nat inside source list NAT-INSIDE interface FastEthernet4 overload
+ip route 0.0.0.0 0.0.0.0 203.0.113.1
 ip ssh time-out 60
 ip ssh version 2
+!
+ip access-list standard NAT-INSIDE
+ permit 10.10.10.0 0.0.0.255
+ permit 10.10.20.0 0.0.0.255
 !
 ipv6 ioam timestamp
 !

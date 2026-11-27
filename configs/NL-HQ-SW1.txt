@@ -1,6 +1,19 @@
+Trying 10.10.99.2...
+Connected to 10.10.99.2.
+Escape character is '^]'.
+ Authorized access only. Northline Systems. 
+
+User Access Verification
+
+Username: admin
+Password: 
+NL-HQ-SW1#term
+NL-HQ-SW1#terminal l
+NL-HQ-SW1#terminal length 0
+NL-HQ-SW1#sh run
 Building configuration...
 
-Current configuration : 3504 bytes
+Current configuration : 4509 bytes
 !
 version 12.1
 no service pad
@@ -54,116 +67,160 @@ interface FastEthernet0/1
 interface FastEthernet0/2
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/3
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/4
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/5
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/6
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/7
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/8
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/9
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/10
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/11
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/12
  description Users
  switchport access vlan 10
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/13
  description Servers
  switchport access vlan 20
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/14
  description Servers
  switchport access vlan 20
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/15
  description Servers
  switchport access vlan 20
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/16
  description Servers
  switchport access vlan 20
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface FastEthernet0/17
  description Unused ports 
  switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
  shutdown
 !
 interface FastEthernet0/18
  description Unused ports 
  switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
  shutdown
 !
 interface FastEthernet0/19
  description Unused ports 
  switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
  shutdown
 !
 interface FastEthernet0/20
  description Unused ports 
  switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
  shutdown
 !
 interface FastEthernet0/21
  description ISP-HQ
  switchport access vlan 901
+ switchport mode access
+ switchport nonegotiate
 !
 interface FastEthernet0/22
  description ISP-BR
  switchport access vlan 902
+ switchport mode access
+ switchport nonegotiate
 !
 interface FastEthernet0/23
  description ISP-TRUNK
- switchport access vlan 999
  switchport trunk native vlan 999
  switchport trunk allowed vlan 901,902
  switchport mode trunk
+ switchport nonegotiate
 !
 interface FastEthernet0/24
  description NOC Mgmt 
  switchport access vlan 99
+ switchport mode access
+ switchport nonegotiate
  spanning-tree portfast
 !
 interface Vlan1
@@ -176,7 +233,7 @@ interface Vlan99
  no ip route-cache
 !
 ip default-gateway 10.10.99.1
-ip http server
+no ip http server
 banner motd ^C Authorized access only. Northline Systems. ^C
 !
 line con 0
@@ -184,11 +241,11 @@ line con 0
  logging synchronous
  login local
 line vty 0 4
- password <removed>
- login
+ login local
 line vty 5 15
- password <removed>
- login
+ login local
 !
 !
 end
+
+NL-HQ-SW1#exit
